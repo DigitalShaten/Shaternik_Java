@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Домашнее задание №3
  * @author Nikita Shaternik

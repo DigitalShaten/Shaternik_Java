@@ -1,6 +1,5 @@
 import java.util.Locale;
 import java.util.Scanner;
-
 /**
  * Домашнее задание №1
  * @author Nikita Shaternik
