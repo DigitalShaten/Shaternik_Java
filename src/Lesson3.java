@@ -24,7 +24,7 @@ public class Lesson3 {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> tasker.addTask();
+                case 1 -> tasker.addTaskName();
                 case 2 -> tasker.showTasks();
                 case 3 -> tasker.removeTask();
                 case 4 -> {
@@ -42,7 +42,8 @@ class Tasker {
     private ArrayList<String> toDo = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
-    public void addTask() {
+    //Создам мердж-конфликт за счет смены нейма метода
+    public void addTaskName() {
         System.out.println("Введите задачу:");
         String task = scanner.nextLine();
 
