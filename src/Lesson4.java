@@ -64,7 +64,7 @@ public class Lesson4 {
         int numberOfArray = scannerNumber();
         int[] arrayTaskOne = arrayCreate(numberOfArray);
 
-        System.out.println("Сначала в одном порядку");
+        System.out.println("Сначала в одном порядке");
         for (int i = 0; i < arrayTaskOne.length; i++) {
             System.out.print(arrayTaskOne[i]);
             if (i < arrayTaskOne.length - 1) {
@@ -125,28 +125,106 @@ public class Lesson4 {
         int numberOfArray = scannerNumber();
         int[] arrayTaskThree = arrayCreate(numberOfArray);
 
-        int maxNumber = arrayTaskThree[0];
-        int minNumber = arrayTaskThree[0];
+        int maxIndex = 0;
+        int minIndex = 0;
 
         System.out.println("Сформирован массив: " + Arrays.toString(arrayTaskThree));
+        for (int i = 0; i < arrayTaskThree.length; i++) {
+            if (arrayTaskThree[i] > arrayTaskThree[maxIndex]) {
+                maxIndex=i;
+            }
+            if (arrayTaskThree[i] < arrayTaskThree[minIndex]) {
+                minIndex = i;
+            }
+        }
 
-
+        System.out.println("\nИндекс минимального элемента: " + minIndex);
+        System.out.println("Индекс максимального элемента: " + maxIndex);
         printDash("Продолжим?");
     }
     public static void taskFour () {
         /*Задача 4:
         Найти и вывести количество нулевых элементов. Если нулевых элементов нет - вывести сообщение, что их нет. */
+        System.out.println("Задача 4: Найти и вывести количество нулевых элементов.");
+        System.out.println("Задайте размер массива. Введите целое число: ");
+
+        short zeroArrayCapacity = 0;
+        int numberOfArray = scannerNumber();
+        int[] arrayTaskFour = new int[numberOfArray];
+
+        System.out.println("Задайте значения для массива.");
+        for (int i = 0; i < numberOfArray; i++) {
+            System.out.println("Введите элемент " + (i+1) + ": ");
+            arrayTaskFour[i] = scanner.nextInt();
+        }
+
+        for (int num : arrayTaskFour) {
+            if (num == 0) zeroArrayCapacity++;
+        }
+
+        if (zeroArrayCapacity == 0) {
+            System.out.println("В массиве нет нулевых элементов.");
+        } else {
+            System.out.println("Количество нулевых элементов составляет: " + zeroArrayCapacity);
+        }
+
+        printDash("Продолжим?");
+
     }
     public static void taskFive () {
         /*Задача 5:
         Пройти по массиву и поменять местами элементы первый и последний, второй и
         предпоследний и т.д.*/
+        System.out.println("Задача 5: Пройти по массиву и поменять местами элементы первый и последний, второй и предпоследний и т.д.");
+        System.out.println("Задайте размер массива.");
+
+        int numberOfArray = scannerNumber();
+        int[] arrayTaskFive = arrayCreate(numberOfArray);
+
+        System.out.println("Сформирован массив: " + Arrays.toString(arrayTaskFive));
+
+        for (int i = 0; i < numberOfArray / 2; i++) {
+            int temp = arrayTaskFive[i];
+            arrayTaskFive[i] = arrayTaskFive[numberOfArray - 1 - i];
+            arrayTaskFive[numberOfArray - 1 - i] = temp;
+        }
+        System.out.println("Поменяли местами массив: " + Arrays.toString(arrayTaskFive));
+        printDash("Продолжим?");
     }
+
     public static void taskSix () {
         /*Задача 6:
         Проверить, является ли массив возрастающей последовательностью (каждое следующее
         число больше предыдущего).*/
+
+        System.out.println("Задача 5: Пройти по массиву и поменять местами элементы первый и последний, второй и предпоследний и т.д.");
+        System.out.println("Задайте размер массива.");
+        boolean checkUpperArray = true;
+        int numberOfArray = scannerNumber();
+        int[] arrayTaskSix = new int[numberOfArray];
+
+        System.out.println("Задайте значения для массива.");
+        for (int i = 0; i < numberOfArray; i++) {
+            System.out.println("Введите элемент " + (i+1) + ": ");
+            arrayTaskSix[i] = scanner.nextInt();
+        }
+
+        System.out.println("Сформирован массив: " + Arrays.toString(arrayTaskSix));
+        for (int i = 1; i < arrayTaskSix.length; i++) {
+            if (arrayTaskSix[i] <= arrayTaskSix[i - 1]) {
+                checkUpperArray = false;
+            }
+        }
+
+        if (checkUpperArray) {
+            System.out.println("Массив имеет возрастающую последовательность");
+        } else {
+            System.out.println("Массив не имеет возрастающую последовательность :(");
+        }
+        printDash("Продолжим?");
+
     }
+
     public static void taskSeven () {
         /* Задача *:
         Имеется массив из неотрицательных чисел(любой). Представьте что массив
@@ -158,6 +236,33 @@ public class Lesson4 {
         Output: [1,4,0,5,6,4]
         Input: [9,9,9]
         Output: [1,0,0,0] */
+
+        System.out.println("Задача 7: Задача добавить единицу к этому “числу” и на выходе получить исправленный массив.");
+        System.out.println("Задайте размер массива.");
+
+        int numberOfArray = scannerNumber();
+        int[] arrayTaskSeven = new int[numberOfArray];
+
+        System.out.println("Задайте значения для массива.");
+        for (int i = 0; i < numberOfArray; i++) {
+            System.out.println("Введите элемент " + (i+1) + ": ");
+            arrayTaskSeven[i] = scanner.nextInt();
+        }
+
+        System.out.println("Сформирован массив: " + Arrays.toString(arrayTaskSeven));
+
+        for (int i = arrayTaskSeven.length - 1; i >= 0; i --) {
+            if (arrayTaskSeven[i] < 9) {
+                arrayTaskSeven[i]++;
+                System.out.println("Сформирован новый массив: " + Arrays.toString(arrayTaskSeven));
+                return;
+            }
+            arrayTaskSeven[i] = 0;
+        }
+        int[] newArrayTaskSeven = new int[arrayTaskSeven.length+1];
+        newArrayTaskSeven[0] = 1;
+
+        System.out.println("Сформирован новый массив: " + Arrays.toString(newArrayTaskSeven));
     }
 
     /**
