@@ -1,3 +1,10 @@
+/**
+ * Домашнее задание №5
+ *
+ * @author Nikita Shaternik
+ * 15.03.2026
+ */
+
 package hw.lesson5;
 
 import javafx.application.Application;
@@ -68,7 +75,11 @@ public class Main extends Application {
             logArea.appendText("Открыто задание 2\n");
             root.setCenter(tasker.taskTwo(logArea, this));
         });
-        task3.setOnAction(e -> logArea.appendText("Задание 3 пока не сделано\n"));
+        task3.setOnAction(e -> {
+            logArea.clear();
+            logArea.appendText("Открыто задание 2\n");
+            root.setCenter(tasker.taskThree(logArea, this));
+        });
 
         exit.setOnAction(e -> {
             logArea.appendText("Выход...\n");
