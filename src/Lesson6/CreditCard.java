@@ -1,6 +1,16 @@
 package Lesson6;
 
 public class CreditCard {
+    /*
+    Задача 1:
+    Создать класс CreditCard c полями номер счета, текущая сумма на счету. Добавьте
+    метод, который позволяет начислять сумму на кредитную карточку. Добавьте метод,
+    который позволяет снимать с карточки некоторую сумму. Добавьте метод, который
+    выводит текущую информацию о карточке. Напишите программу, которая создает три
+    объекта класса CreditCard у которых заданы номер счета и начальная сумма.
+    Тестовый сценарий для проверки: Положите деньги на первые две карточки и снимите с
+    третьей. Выведите на экран текущее состояние всех трех карточек. */
+
     private String accNumber;
     private double amountCash = 0;
 
@@ -30,7 +40,7 @@ public class CreditCard {
         }
         this.amountCash -= depositCash;
         other.amountCash += depositCash;
-        System.out.println("Перевод на " + depositCash + " руб. Баланс составляет: " + amountCash + " руб.");
+        System.out.println("Перевод на карту " + other.accNumber + ". Депозит: " + depositCash + " руб. Баланс составляет: " + amountCash + " руб.");
     }
 
     public void withdrawal (double withdrawalCash) {
