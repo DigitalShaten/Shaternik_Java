@@ -11,10 +11,12 @@ public class Dog extends Animal{
         return new Dog();
     }
 
+    @Override
     public void voice() {
         System.out.println("Звуки дога");
     }
 
+    @Override
     public String eat(String food){
         if (favoriteFood.contains(food.toLowerCase()))
             return "Собака любит кушать: " + food;
