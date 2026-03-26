@@ -1,10 +1,13 @@
 package Lesson9;
 
-import Lesson8.Task2.Apple;
-import Lesson9.Task1.*;
+/**
+ * Домашнее задание №9
+ * @author Nikita Shaternik
+ * 26.03.2026
+ */
 
+import Lesson9.Task1.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
