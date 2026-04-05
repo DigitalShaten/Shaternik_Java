@@ -1,5 +1,11 @@
 package Lesson11;
 
+/**
+ * Домашнее задание №11
+ * @author Nikita Shaternik
+ * 05.04.2026
+ */
+
 import java.util.Scanner;
 
 public class Lesson11 {
