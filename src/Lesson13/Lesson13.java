@@ -36,10 +36,10 @@ public class Lesson13 {
         Написать try/catch/finally, в котором finally вызван не будет. */
         try {
             System.out.println("Задача со звездочкой!");
-            System.exit(0);
             throw new RuntimeException();
         } catch (RuntimeException runtimeExceptionE) {
-            System.out.println("Что-то пошло не так");
+            System.out.println("Что-то пошло не так и мы выходим!");
+            System.exit(0);
         } finally {
             System.out.println("Этого мы не увидим");
         }
