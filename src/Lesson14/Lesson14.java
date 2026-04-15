@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Домашнее задание №14
  *
  * @author Nikita Shaternik
- * 14.04.2026
+ * 15.04.2026
  */
 
 public class Lesson14 {
@@ -51,8 +51,49 @@ public class Lesson14 {
         номеров документов следует добавить информацию о том, почему этот документ не валиден.
          */
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите путь к файлу:");
         String path = scanner.nextLine();
 
+        try (
+                BufferedReader reader = new BufferedReader(new FileReader(path));
+                FileWriter validWriter = new FileWriter("src\\Lesson14\\valid.txt");
+                FileWriter invalidWriter = new FileWriter("src\\Lesson14\\invalid.txt");
+        ) {
 
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+
+                line = line.trim();
+
+                if (line.isEmpty()) continue;
+
+                boolean isValid = true;
+                String reason = "";
+
+                if (line.length() != 15) {
+                    isValid = false;
+                    reason += "Неверная длина; ";
+                }
+
+                if (!line.startsWith("docnum") && !line.startsWith("contract")) {
+                    isValid = false;
+                    reason += "Неверный префикс; ";
+                }
+
+                if (!line.matches("[a-zA-Z0-9]+")) {
+                    isValid = false;
+                    reason += "Недопустимые символы; ";
+                }
+
+                if (isValid) {
+                    validWriter.write(line + "\n");
+                } else {
+                    invalidWriter.write(line + " -> " + reason + "\n");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
