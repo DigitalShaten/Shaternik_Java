@@ -3,7 +3,6 @@ package java_core_final_project.model;
 import java_core_final_project.exception.InsufficientFundsException;
 import java_core_final_project.exception.InvalidAmountException;
 
-//счет-баланс
 public class Account {
     private final String accountNumber;
     private int balance;
@@ -15,17 +14,17 @@ public class Account {
 
     public void deposit (int amount) {
         if (amount <= 0) {
-            throw new InvalidAmountException("Введенная сумма должна быть больше 0: " + amount);
+            throw new InvalidAmountException("неверная сумма перевода");
         }
         balance += amount;
     }
 
     public void withdraw (int amount) {
         if (amount <= 0) {
-            throw new InvalidAmountException("Введенная сумма должна быть больше 0: " + amount);
+            throw new InvalidAmountException("неверная сумма перевода");
         }
         if (balance < amount) {
-            throw new InsufficientFundsException("Сумма снятия " + amount + " превышает баланс в " + balance + " руб.");
+            throw new InsufficientFundsException("ошибка во время обработки");
         }
         balance -= amount;
     }

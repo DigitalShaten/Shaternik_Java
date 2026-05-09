@@ -4,19 +4,24 @@ import java_core_final_project.model.ParsedTransferData;
 import java_core_final_project.model.Transaction;
 import java_core_final_project.util.FileParser;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
 
-//читаем файлы, перемещаем файлы
 public class FileService {
     private final TransferService transferService;
     private final FileParser fileParser;
+    private final ReportService reportService;
 
-    public FileService(TransferService transferService, FileParser fileParser) {
+    public FileService(TransferService transferService, FileParser fileParser, ReportService reportService) {
         this.transferService = transferService;
         this.fileParser = fileParser;
+        this.reportService = reportService;
     }
 
-    public void processInputDirectory(String path) {
+    public void processInputDirectory(String path, boolean changeMode) {
         File directory = new File(path);
         File[] files = directory.listFiles();
         if(files == null || files.length == 0) {
@@ -27,31 +32,40 @@ public class FileService {
         for (File file : files) {
             if (!isTxtFile(file)) continue;
 
-            processFile(file);
+            if (changeMode) processFile(file);
+            else readFile(file);
         }
     }
 
     private void processFile (File file) {
         try {
-            ParsedTransferData data = fileParser.parse(file);
-            Transaction transaction = transferService.transfer(
-                    data.fromAccount(),
-                    data.toAccount(),
-                    data.amount()
-            );
+            List<ParsedTransferData> operations = fileParser.parse(file);
+            for (ParsedTransferData data : operations) {
 
-            // пока просто выводим результат
-            System.out.println(transaction);
+                Transaction transaction =
+                        transferService.transfer(
+                                data.fromAccount(),
+                                data.toAccount(),
+                                data.amount()
+                        );
 
-            // TODO:
-            // записать в report.txt
+                reportService.write(transaction, file.getName());
+            }
 
-            // TODO:
-            // переместить файл в archive
-        } catch (Exception e) {
+        } catch (IOException ioException) {
             System.out.println("Ошибка обработки файла: " + file.getName());
         }
-
+    }
+    private void readFile (File file) {
+        try (FileReader fileReader = new FileReader(file)){
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException  ioException) {
+            System.out.println("Ошибка чтения файла: " + file.getName());
+        }
     }
 
     private boolean isTxtFile (File file) {
