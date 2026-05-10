@@ -46,11 +46,11 @@ public class FileParser {
     }
 
     private void validateAndAdd(List<ParsedTransferData> list, String from, String to, double amount) {
-        if (from != null && to != null && amount > 0) {
+        if (from != null && to != null) {
             if (from.matches(ACCOUNT_REGEX) && to.matches(ACCOUNT_REGEX)) {
                 list.add(new ParsedTransferData(from, to, amount));
             } else {
-                System.err.println("Пропущен перевод: неверный формат счета (" + from + " -> " + to + ")");
+                System.err.println("Ошибка формата счета: " + from + " или " + to);
             }
         }
     }

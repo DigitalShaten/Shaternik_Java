@@ -17,46 +17,63 @@ public class TransferService {
         this.accountRepository = accountRepository;
     }
 
-    public Transaction transfer(
+    public synchronized Transaction transfer(
             String fromAccountNumber,
             String toAccountNumber,
             double amount
     ) {
         try {
-            Account fromAccount = findAccount(fromAccountNumber);
-            Account toAccount = findAccount(toAccountNumber);
+            if (amount <= 0) {
+                throw new InvalidAmountException("Сумма перевода должна быть положительной: " + amount);
+            }
+
+            if (fromAccountNumber.equals(toAccountNumber)) {
+                throw new IllegalArgumentException("Счет отправителя и получателя совпадают");
+            }
+
+            Account fromAccount = accountRepository.getAccountByNumber(fromAccountNumber);
+            Account toAccount = accountRepository.getAccountByNumber(toAccountNumber);
+
+            if (fromAccount == null) {
+                throw new AccountNotFoundException("Счет отправителя не найден: " + fromAccountNumber);
+            }
+            if (toAccount == null) {
+                throw new AccountNotFoundException("Счет получателя не найден: " + toAccountNumber);
+            }
 
             fromAccount.withdraw(amount);
             toAccount.deposit(amount);
+
+            accountRepository.updateAccount(fromAccount);
+            accountRepository.updateAccount(toAccount);
 
             return new Transaction(
                     fromAccountNumber,
                     toAccountNumber,
                     amount,
                     TransactionStatus.SUCCESS,
-                    "успешно обработан",
+                    "Успешно обработан",
                     LocalDateTime.now()
             );
-        } catch (AccountNotFoundException | InvalidAmountException | InsufficientFundsException exception){
+
+        } catch (AccountNotFoundException | InvalidAmountException | InsufficientFundsException | IllegalArgumentException e) {
             return new Transaction(
                     fromAccountNumber,
                     toAccountNumber,
                     amount,
                     TransactionStatus.ERROR,
-                    exception.getMessage(),
+                    e.getMessage(),
+                    LocalDateTime.now()
+            );
+        } catch (Exception e) {
+            return new Transaction(
+                    fromAccountNumber,
+                    toAccountNumber,
+                    amount,
+                    TransactionStatus.ERROR,
+                    "Внутренняя ошибка системы: " + e.getMessage(),
                     LocalDateTime.now()
             );
         }
     }
-
-    private Account findAccount(String accountNumber) {
-        Account account = accountRepository.getAccountByNumber(accountNumber);
-
-        if (account == null) {
-            throw new AccountNotFoundException("Аккаунт не найден: " + accountNumber);
-        }
-        return account;
-    }
-
-
 }

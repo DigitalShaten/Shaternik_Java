@@ -4,16 +4,14 @@ import java_core_final_project.repository.AccountRepository;
 import java_core_final_project.service.FileService;
 import java_core_final_project.service.ReportService;
 import java_core_final_project.service.TransferService;
+import java_core_final_project.util.DatabaseConfig;
 import java_core_final_project.util.FileParser;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 /**
  * Java core final project
  * @author Nikita Shaternik
- * *.05.2026
+ * 10.05.2026
  */
 
 public class MainProject {
@@ -26,8 +24,9 @@ public class MainProject {
         FileService fileService = new FileService(transferService,fileParser, reportService);
         Scanner scanner = new Scanner(System.in);
 
+        DatabaseConfig.initializeDatabase();
 
-        System.out.println("Доброй пожаловать в программу переводов!");
+        System.out.println("Добро пожаловать в программу переводов!");
 
         while (true) {
             System.out.println("Выберите необходимый процесс:");
@@ -50,7 +49,7 @@ public class MainProject {
                     System.out.println("Процесс завершен!");
                 }
                 case 2 -> {
-                    fileService.readArchiveFiles("src/java_core_final_project/archive");
+                    fileService.readReportFile("src/java_core_final_project/archive");
                     System.out.println("Процесс завершен!");
                 }
                 case 3 -> {
@@ -58,6 +57,7 @@ public class MainProject {
                 }
                 case 4 -> {
                     System.out.println("До свидания!");
+                    fileService.shutdown();
                     return;
                 }
                 default -> System.out.println("Неверный пункт меню.");

@@ -13,12 +13,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FileService {
     private final TransferService transferService;
     private final FileParser fileParser;
     private final ReportService reportService;
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public FileService(TransferService transferService, FileParser fileParser, ReportService reportService) {
         this.transferService = transferService;
@@ -35,12 +40,22 @@ public class FileService {
             return;
         }
 
-        for (File file : files) {
-            if (isTxtFile(file)) {
-                processFile(file);
-                moveFileToArchive(file, archivePath);
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        if (files != null) {
+            for (File file : files) {
+                if (isTxtFile(file)) {
+                    CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                        processFile(file);
+                        moveFileToArchive(file, archivePath);
+                    }, executor);
+
+                    futures.add(future);
+                }
             }
         }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
     }
 
     private void processFile (File file) {
@@ -80,29 +95,38 @@ public class FileService {
         }
     }
 
-    public void readArchiveFiles(String archivePath) {
-        File directory = new File(archivePath);
-        File[] files = directory.listFiles();
+    public void readReportFile(String archivePath) {
+        File reportFile = new File(archivePath, "report.txt");
 
-        if (files == null || files.length == 0) {
-            System.out.println("Архив пуст.");
+        if (!reportFile.exists() || !reportFile.isFile()) {
+            System.out.println("Файл отчета в архиве не найден.");
             return;
         }
 
-        for (File file : files) {
-            System.out.println("Содержимое файла: " + file.getName());
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            } catch (IOException e) {
-                System.out.println("Ошибка чтения архива.");
+        System.out.println("Содержимое отчета");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(reportFile))) {
+            String line;
+            boolean isEmpty = true;
+
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+                isEmpty = false;
             }
+
+            if (isEmpty) {
+                System.out.println("Файл отчета пуст.");
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла отчета: " + e.getMessage());
         }
     }
 
     private boolean isTxtFile (File file) {
         return file.isFile() && file.getName().endsWith(".txt");
+    }
+
+    public void shutdown() {
+        executor.shutdown();
     }
 }
