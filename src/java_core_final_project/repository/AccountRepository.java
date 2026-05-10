@@ -9,8 +9,11 @@ import java.util.Map;
 public class AccountRepository {
     private Map<String, Account> accounts = new HashMap<>();
 
+    public AccountRepository() {
+        initializeData();
+    }
 
-    public Map<String, Account> accounts () {
+    private void initializeData() {
         accounts.put("12345-12345", new Account("12345-12345", 100));
         accounts.put("54321-54321", new Account("54321-54321", 500));
         accounts.put("11111-11111", new Account("11111-11111", 1000));
@@ -23,11 +26,9 @@ public class AccountRepository {
         accounts.put("88888-88888", new Account("88888-88888", 2000));
         accounts.put("99999-99999", new Account("99999-99999", 450));
         accounts.put("10101-10101", new Account("10101-10101", 1200));
-        return accounts;
     }
 
     public Account getAccountByNumber(String accountNumber) {
-        accounts();
         return accounts.get(accountNumber);
     }
 }

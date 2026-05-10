@@ -20,7 +20,7 @@ public class TransferService {
     public Transaction transfer(
             String fromAccountNumber,
             String toAccountNumber,
-            int amount
+            double amount
     ) {
         try {
             Account fromAccount = findAccount(fromAccountNumber);
@@ -50,7 +50,6 @@ public class TransferService {
     }
 
     private Account findAccount(String accountNumber) {
-        // Сервис просто делегирует поиск репозиторию
         Account account = accountRepository.getAccountByNumber(accountNumber);
 
         if (account == null) {

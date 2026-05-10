@@ -5,21 +5,21 @@ import java_core_final_project.exception.InvalidAmountException;
 
 public class Account {
     private final String accountNumber;
-    private int balance;
+    private double balance;
 
-    public Account(String accountNumber, int balance) {
+    public Account(String accountNumber, double balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
 
-    public void deposit (int amount) {
+    public void deposit (double amount) {
         if (amount <= 0) {
             throw new InvalidAmountException("неверная сумма перевода");
         }
         balance += amount;
     }
 
-    public void withdraw (int amount) {
+    public void withdraw (double amount) {
         if (amount <= 0) {
             throw new InvalidAmountException("неверная сумма перевода");
         }
@@ -33,7 +33,7 @@ public class Account {
         return accountNumber;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 }

@@ -6,6 +6,8 @@ import java_core_final_project.service.ReportService;
 import java_core_final_project.service.TransferService;
 import java_core_final_project.util.FileParser;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 /**
@@ -31,26 +33,34 @@ public class MainProject {
             System.out.println("Выберите необходимый процесс:");
             System.out.println("1. Парсинг файлов перевода из input");
             System.out.println("2. Вывод списка всех переводов из файла-отчета");
-            System.out.println("3. Выход из приложения");
+            System.out.println("3. Вывод истории обработанных записей из файла в назначенный период");
+            System.out.println("4. Выход из приложения");
             System.out.print("Ввод пользователя (цифра): ");
-            int choose = scanner.nextInt();
-            if (scanner.hasNextLine()){
-                switch (choose) {
-                    case 1 -> {
-                        fileService.processInputDirectory("src\\java_core_final_project\\input", true);
-                        System.out.println("Процесс завершен!");
-                    }
-                    case 2 -> {
-                        fileService.processInputDirectory("src\\java_core_final_project\\archive", false);
-                        System.out.println("Процесс завершен!");
-                    }
-                    case 3 -> {
-                        System.out.println("До свидания!");
-                        return;
-                    }
+            String input = scanner.nextLine();
+            int choose;
+            try {
+                choose = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Пожалуйста, введите цифру от 1 до 4.");
+                continue;
+            }
+            switch (choose) {
+                case 1 -> {
+                    fileService.processInputDirectory("src/java_core_final_project/input", "src/java_core_final_project/archive");
+                    System.out.println("Процесс завершен!");
                 }
-            } else {
-                System.out.println("Введено неверное значение.");
+                case 2 -> {
+                    fileService.readArchiveFiles("src/java_core_final_project/archive");
+                    System.out.println("Процесс завершен!");
+                }
+                case 3 -> {
+                    reportService.showOperationsByDate();
+                }
+                case 4 -> {
+                    System.out.println("До свидания!");
+                    return;
+                }
+                default -> System.out.println("Неверный пункт меню.");
             }
         }
     }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record Transaction (
         String fromAccount,
         String toAccount,
-        int amount,
+        double amount,
         TransactionStatus status,
         String message,
         LocalDateTime dateTime
