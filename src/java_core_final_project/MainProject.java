@@ -52,9 +52,8 @@ public class MainProject {
                     fileService.readReportFile("src/java_core_final_project/archive");
                     System.out.println("Процесс завершен!");
                 }
-                case 3 -> {
-                    reportService.showOperationsByDate();
-                }
+                case 3 -> reportService.showOperationsByDate();
+
                 case 4 -> {
                     System.out.println("До свидания!");
                     fileService.shutdown();
